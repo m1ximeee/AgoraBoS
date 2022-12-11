@@ -425,12 +425,13 @@ class PdoJeux
      * 
      * @param int $idGenre :l'identifiant du genre à supprimer 
      */
-    public function supprimerPegi(int $idPegi): void
+    public function supprimerPegi(String $idPegi): void
     {
+        $intIdPegi = intval($idPegi);
         try {
             $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM pegi "
                 . "WHERE pegi.idPegi = :unIdPegi");
-            $requete_prepare->bindParam(':unIdPegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdPegi', $intIdPegi, PDO::PARAM_INT);
             $requete_prepare->execute();
         } catch (Exception $e) {
             die('<div class = "erreur">Erreur dans la requête !<p>'

@@ -22,135 +22,116 @@
                     </tr>
                 </thead>
                 <tbody>
-                {{include ('message.html.twig')}}
+                {{include ('messages.html.twig')}}
                     <!-- formulaire pour ajouter un nouveau Jeu-->
                     <tr>
                         <form action="{{path('jeux_ajouter')}}" method="post">
                             <td>
-                                <input type="text" id="txtIdJeu" name="txtIdJeu" size="24" required minlength="4" maxlength="24" placeholder="Nouvelle référence" title="De 4 à 24 caractères" />
+                                <input type="text" id="txtRefJeu" name="txtRefJeu" size="24" required minlength="4" maxlength="24" placeholder="Nouvelle référence" title="De 4 à 24 caractères" />
                             </td>
                             <td>
-                                {% set tbObjets, name, size, idSelect = tbJeux, 'lstPlateforme', 1, '' %}
+                                {% set tbObjets, name, size, idSelect = tbPlateforme, 'strIdPlateforme', 1, '' %}
                                 {{include('liste.html.twig')}}
                             </td>
                             <td>
-                                <?php afficherListe($db->getLesPegis(), "txtPegi", 1, 0); ?>
+                                {% set tbObjets, name, size, idSelect = tbPegi, 'strIdPegi', 1, 0 %}
+                                       {{ include('liste.html.twig') }}
                             </td>
                             <td>
-                                <?php
-                                require_once('./app/_config.inc.php');
-                                afficherListe($db->getLesGenres(), "idSelectGenre", 1, 0);
-                                ?>
+                                {% set tbObjets, name, size, idSelect = tbGenre, 'strIdGenre', 1, 0 %}
+                                    {{ include('liste.html.twig') }}
                             </td>
                             <td>
-                                <?php
-                                require_once('./app/_config.inc.php');
-                                afficherListe($db->getLesMarques(), "idSelectMarque", 1, 0);
-                                ?>
+                                {% set tbObjets, name, size, idSelect = tbMarque, 'strIdMarque', 1, 0 %}
+                                    {{ include('liste.html.twig') }}
                             </td>
                             <td>
-                                <input type="text" id="txtNom" name="txtNom" size="24" required minlength="4" maxlength="24" placeholder="Nom" title="De 4 à 24 caractères" />
+                                <input type="text" id="txtNomJeu" name="txtNomJeu" size="24" required minlength="4" maxlength="24" placeholder="Nom" title="De 4 à 24 caractères" />
                             </td>
                             <td>
-                                <input type="number" id="prixJeu" name="prixJeu" size="24" step="any" required placeholder="Prix" title="De 4 à 24 caractères" />
+                                <input type="number" id="txtPrixJeu" name="txtPrixJeu" size="24" step="any" required placeholder="Prix" title="De 4 à 24 caractères" />
                             </td>
                             <td>
                                 <input type="date" id="dateParutionJeu" name="dateParutionJeu" size="24" required minlength="4" maxlength="24" placeholder="Date de Parution" title="De 4 à 24 caractères" />
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouveauJeu" title="Enregistrer nouveau Jeu"><i class="fa fa-save"></i></button>
+                                <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouveauJeu" title="Enregistrer nouveau Jeu" ><i class="fa fa-save"></i></button>
                                 <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>
                             </td>
                         </form>
                     </tr>
 
-                    <?php
-                    foreach ($tbJeux as $jeu) {
-                    ?>
+                    {% for key, jeu in tbJeux %}
                         <tr>
 
                             <!-- formulaire pour modifier et supprimer les Jeux-->
-                            <form action="index.php?uc=gererJeux" method="post">
-                                <td><?php echo $jeu->identifiant; ?><input type="hidden" id="txtIdJeu" name="txtIdJeu" value="<?php echo $jeu->identifiant; ?>" /></td>
-                                <td><?php
-                                    if ($jeu->identifiant != $idJeuModif) {
-                                        echo $jeu->libPlateforme;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                        echo $jeu->ageLimite;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                        echo $jeu->libGenre;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                        echo $jeu->nomMarque;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                        echo $jeu->nom;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                        echo $jeu->prix;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                        echo $jeu->dateParution;
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php if ($notification != 'rien' && $jeu->identifiant == $idJeuNotif) {
-                                            echo '<button class="btn btn-success btn-xs"><i class="fa fa-check"></i>' . $notification . '</button>';
-                                        } ?>
-                                    <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierJeu" title="Modifier"><i class="fa fa-pencil"></i></button>
-                                    <button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerJeu" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce Jeu?');"><i class="fa fa-trash-o "></i></button>
-                                </td>
-                            <?php
-                                    } else {
-                                        afficherListe($db->getLesPlateformes(), "libPlateforme", 1, $jeu->idPlateforme);
-                            ?>
-                                </td>
-                                <td>
-                                    <?php afficherListe($db->getLesPegis(), "libPegi", 1, $jeu->idPegi); ?>
-                                </td>
-                                <td>
-                                    <?php afficherListe($db->getLesGenres(), "libGenre", 1, $jeu->idGenre); ?>
-                                </td>
-                                <td>
-                                    <?php afficherListe($db->getLesMarques(), "libMarque", 1, $jeu->idMarque); ?>
-                                </td>
-                                <td>
-                                    <input type="text" id="txtLibJeu" name="txtLibJeu" size="24" required minlength="4" maxlength="24" value="<?php echo $jeu->nom; ?>" />
-                                </td>
-                                <td>
-                                    <input type="number" id="txtPrix" name="txtPrix" size="24" required step="any" value="<?php echo $jeu->prix; ?>" />
-                                </td>
-                                <td>
-                                    <input type="date" id="txtDateParution" name="txtDateParution" size="24" required minlength="4" maxlength="24" value="<?php echo $jeu->dateParution; ?>" />
-                                </td>
-                                <td>
-                                    <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierJeu" title="Enregistrer"><i class="fa fa-save"></i></button>
-                                    <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>
-                                    <button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierJeu" title="Annuler"><i class="fa fa-undo"></i></button>
-                                </td>
-                            <?php
-                                    }
-                            ?>
+                            <form method="post">
+                                <td>{{ jeu.refJeu }}<input type="hidden" id="txtRefJeu" name="txtRefJeu" value="{{ jeu.refJeu }}" /></td>
+                                {% if jeu.refJeu != idJeuxModif %}
+                                    <td>
+                                        {{ jeu.libPlateforme }}
+                                    </td>
+                                    <td>
+                                        {{ jeu.ageLimite }}
+                                    </td>
+                                    <td>
+                                        {{ jeu.libGenre }}
+                                    </td>
+                                    <td>
+                                        {{ jeu.nomMarque }}
+                                    </td>
+                                    <td>
+                                    {{ jeu.libelle }}
+                                    </td>
+                                    <td>
+                                        {{ jeu.prix }}
+                                    </td>
+                                    <td>
+                                        {{ jeu.dateParution }}
+                                    </td>
+                                    <td>
+                                        {% if notification != 'rien' and jeu.refJeu == idJeuxModif %}
+                                        <button class="btn btn-success btn-xs"><i class="fa fa-check"></i>{{ notification }}</button>
+                                        {% endif %}
+                                        <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierJeu" title="Modifier" formaction="{{path('jeux_demandermodifier')}}"><i class="fa fa-pencil" ></i></button>
+                                        <button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerJeu" title="Supprimer" formaction="{{path('jeux_supprimer')}}" onclick="return confirm('Voulez-vous vraiment supprimer ce Jeu?');"><i class="fa fa-trash-o "></i></button>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                    {% set tbObjets, name, size, idSelect = tbPlateforme, 'strIdPlateforme', 1, jeu.idPlateforme %}
+                                    {{include('liste.html.twig')}}
+                                    </td>
+                                    <td>
+                                        {% set tbObjets, name, size, idSelect = tbPegi, 'strIdPegi',1, jeu.idPegi %}
+                                            {{ include('liste.html.twig') }}
+                                    </td>
+                                    <td>
+                                        {% set tbObjets, name, size, idSelect = tbGenre, 'strIdGenre', 0, jeu.idGenre %}
+                                            {{ include('liste.html.twig') }}
+                                    </td>
+                                    <td>
+                                        {% set tbObjets, name, size, idSelect = tbMarque, 'strIdMarque', 0, jeu.idMarque %}
+                                            {{ include('liste.html.twig') }}
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtNomJeu" name="txtNomJeu" size="24" required minlength="4" maxlength="24" value="{{jeu.libelle}}" />
+                                    </td>
+                                    <td>
+                                        <input type="number" id="txtPrix" name="txtPrixJeu" size="24" required step="any" value="{{jeu.prix}}" />
+                                    </td>
+                                    <td>
+                                        <input type="date" id="dateParutionJeu" name="dateParutionJeu" size="24" required minlength="4" maxlength="24" value="{{jeu.dateParution}}" />
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierJeu" title="Enregistrer" formaction="{{path('jeux_validermodifier')}}"><i class="fa fa-save"></i></button>
+                                        <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>
+                                        <button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierJeu" title="Annuler" formaction="{{path('jeux_afficher')}}"><i class="fa fa-undo"></i></button>
+                                    </td>
+                               {% endif %}
                             </form>
 
                         </tr>
-                    <?php
-                    }
-                    ?>
+                            {% endfor %}
                 </tbody>
             </table>
 
@@ -158,3 +139,4 @@
     </section><!-- fin section Jeux-->
 </div>
 <!--fin div col-sm-6-->
+{% endblock %}

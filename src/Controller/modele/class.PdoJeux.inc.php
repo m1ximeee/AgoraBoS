@@ -190,14 +190,12 @@ class PdoJeux
      * Ajoute un nouveau genre avec le libellé donné en paramètre
      * 
      * @param string $libGenre : le libelle du genre à ajouter
-     * @return int l'identifiant du genre crée
+     * 
      */
     public function ajouterPlateformes(string $libPlateformes): int
     {
         try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO plateforme "
-                . "(idPlateforme, libPlateforme) "
-                . "VALUES (0, :unLibtbPlateformes) ");
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO plateforme (libPlateforme) VALUES (:unLibtbPlateformes) ");
             $requete_prepare->bindParam(':unLibPlateformes', $libPlateformes, PDO::PARAM_STR);
             $requete_prepare->execute();
             // récupérer l'identifiant crée
